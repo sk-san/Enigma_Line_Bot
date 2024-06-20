@@ -24,4 +24,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	message := linebot.NewTextMessage("Hello User")
+	if _, err := bot.BroadcastMessage(message).Do(); err != nil {
+		log.Fatal(err)
+	}
 }
