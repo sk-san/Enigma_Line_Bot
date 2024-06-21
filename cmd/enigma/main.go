@@ -25,14 +25,18 @@ func main() {
 			return
 		}
 
+		isComplete := false
+		tmp_text := ""
+
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					if message.Text == "hi" {
+					if !(isComplete) {
 						if _, err = bot.ReplyMessage(event.ReplyToken, createTemplateMessage()).Do(); err != nil {
 							log.Print(err)
 						}
+						isComplete = true
 					} else {
 						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("「選択肢を見せて」と入力してください")).Do(); err != nil {
 							log.Print(err)
@@ -58,7 +62,7 @@ func main() {
 }
 
 func createTemplateMessage() *linebot.TemplateMessage {
-	setinit := "Please set an initial setting"
+	setinit := "Please set an initial setting(e.g. abc)"
 	buttons := linebot.NewButtonsTemplate(
 		"", "What do you want to do?", "Which one？",
 		linebot.NewMessageAction("Encryption", setinit),
