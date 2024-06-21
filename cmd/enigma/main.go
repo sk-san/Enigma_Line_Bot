@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	isComplete := false
+	isComplete := true
 	inputText := ""
 	initsetting := ""
 	choice := ""
@@ -33,6 +33,7 @@ func main() {
 			return
 		}
 
+		provideSuggestions()
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage && event.ReplyToken != "" {
 				switch message := event.Message.(type) {
