@@ -4,7 +4,6 @@ import (
 	"math/rand"
 	"strings"
 	"time"
-	"unicode"
 )
 
 func GenerateRandAlphabet() string {
@@ -21,13 +20,13 @@ func GenerateRandAlphabet() string {
 }
 
 func isValid(text string) bool {
-	result := true
-	if len(text) != 3 {
-		result = false
-	}
-	for i := range text {
-		if !unicode.IsLetter(rune(text[i])) {
-			result = false
+	result := false
+	if len(text) == 3 {
+		for i := range text {
+			char := text[i]
+			if (char < 'A' || char > 'Z') && (char < 'a' || char > 'z') {
+				result = true
+			}
 		}
 	}
 	return result
