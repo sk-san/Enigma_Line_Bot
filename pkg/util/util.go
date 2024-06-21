@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+	"unicode"
 )
 
 func GenerateRandAlphabet() string {
@@ -20,12 +21,11 @@ func GenerateRandAlphabet() string {
 }
 
 func IsValid(text string) bool {
-	result := false
+	result := true
 	if len(text) == 3 {
 		for i := range text {
-			char := text[i]
-			if (char < 'A' || char > 'Z') && (char < 'a' || char > 'z') {
-				result = true
+			if text[i] > unicode.MaxASCII {
+				result = false
 			}
 		}
 	}

@@ -44,13 +44,13 @@ func main() {
 
 					} else if isComplete && message.Text == "Decryption" || message.Text == "Encryption" {
 						choice = message.Text
-						msg := linebot.NewTextMessage("Please enter an initial setting e.g. abc")
+						msg := linebot.NewTextMessage("Please enter three alphabets as an initial setting (e.g. abc)")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
 					} else if isComplete && util.IsValid(message.Text) {
 						initsetting = message.Text
-						msg := linebot.NewTextMessage("TEST2")
+						msg := linebot.NewTextMessage("Delete your previous message before encryption or decryption.")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
