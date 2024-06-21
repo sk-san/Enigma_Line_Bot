@@ -40,6 +40,7 @@ func main() {
 					}
 				}
 			} else {
+				// Provide processed text
 				message := linebot.NewTextMessage("This is a test")
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
@@ -63,5 +64,5 @@ func createTemplateMessage() *linebot.TemplateMessage {
 		linebot.NewMessageAction("Encryption", setinit),
 		linebot.NewMessageAction("Decryption", setinit),
 	)
-	return linebot.NewTemplateMessage("This is a test", buttons)
+	return linebot.NewTemplateMessage("tt", buttons)
 }
