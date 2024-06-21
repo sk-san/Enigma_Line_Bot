@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -44,12 +45,15 @@ func main() {
 
 					} else if isComplete && message.Text == "Decryption" || message.Text == "Encryption" {
 						choice = message.Text
-						msg := linebot.NewTextMessage("Please enter three alphabets as an initial setting (e.g. abc)")
+						msg := linebot.NewTextMessage("Please enter three alphabets as an initial setting and text (e.g abc.Hello Python) Do not forget adding . dot between three alphabets and text")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
 					} else if isComplete && util.IsValid(message.Text) {
-						initsetting = message.Text
+						dotIndex := strings.Index(message.Text, ".")
+						initsetting = message.Text[:dotIndex]
+						inputText = message.Text[:dotIndex+1]
+
 						msg := linebot.NewTextMessage("Delete your previous message before encryption or decryption.")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
