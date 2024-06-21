@@ -26,7 +26,6 @@ func main() {
 		}
 
 		isComplete := false
-		tmp_text := ""
 
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
