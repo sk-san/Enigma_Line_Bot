@@ -18,13 +18,13 @@ func main() {
 	}
 
 	isComplete := true
-	inputText := ""
-	initsetting := ""
-	choice := ""
+	textToProcess := ""
+	initialSetting := ""
+	operationChoice := ""
 
-	message := provideSuggestions()
+	message := createSuggestionTemplate()
 	if _, err := bot.BroadcastMessage(message).Do(); err != nil {
-		log.Print(err)
+		log.Fatal(err)
 	}
 
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
@@ -43,50 +43,50 @@ func main() {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					if !(isComplete) {
-						if _, err = bot.ReplyMessage(event.ReplyToken, provideSuggestions()).Do(); err != nil {
-							log.Print(err)
+						if _, err = bot.ReplyMessage(event.ReplyToken, createSuggestionTemplate()).Do(); err != nil {
+							log.Fatal(err)
 						}
 						isComplete = true
 					} else if isComplete && message.Text == "Decryption" || message.Text == "Encryption" {
-						choice = message.Text
+						operationChoice = message.Text
 						msg := linebot.NewTextMessage("Please enter three alphabets as an initial setting and text (e.g abc.Hello Python) Do not forget adding . dot between three alphabets and text")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
 					} else if isComplete && util.IsValid(message.Text) {
 						dotIndex := strings.Index(message.Text, ".")
-						initsetting = message.Text[:dotIndex]
-						inputText = message.Text[dotIndex+1:]
+						initialSetting = message.Text[:dotIndex]
+						textToProcess = message.Text[dotIndex+1:]
 
-						msg := linebot.NewTextMessage("Delete your previous setting and inputText before encryption or decryption.")
+						msg := linebot.NewTextMessage("Delete your previous setting and textToProcess before encryption or decryption.")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
 					} else {
 						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
-							log.Print(err)
+							log.Fatal(err)
 						}
 					}
 				}
 			} else {
 				result := ""
 				e := core.Enigma_machine{}
-				if choice == "Encryption" {
-					e.SetDefault(initsetting)
-					result = e.Encrypt(inputText)
+				if operationChoice == "Encryption" {
+					e.SetDefault(initialSetting)
+					result = e.Encrypt(textToProcess)
 				} else {
-					e.SetDefault(initsetting)
-					result = e.Decrypt(inputText)
+					e.SetDefault(initialSetting)
+					result = e.Decrypt(textToProcess)
 				}
-				message := linebot.NewTextMessage(choice + ": " + result)
+				message := linebot.NewTextMessage(operationChoice + ": " + result + "Send something if you want to continue")
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
 				}
 
 				isComplete = false
-				inputText = ""
-				initsetting = ""
-				choice = ""
+				textToProcess = ""
+				initialSetting = ""
+				operationChoice = ""
 			}
 		}
 	})
@@ -100,7 +100,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-func provideSuggestions() *linebot.TemplateMessage {
+func createSuggestionTemplate() *linebot.TemplateMessage {
 	buttons := linebot.NewButtonsTemplate(
 		"", "What do you want to do?", "Which one？",
 		linebot.NewMessageAction("Encryption", "Encryption"),
