@@ -39,7 +39,6 @@ func main() {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					if !(isComplete) {
-						fmt.Println(provideSuggestions())
 						if _, err = bot.ReplyMessage(event.ReplyToken, provideSuggestions()).Do(); err != nil {
 							log.Print(err)
 						}
