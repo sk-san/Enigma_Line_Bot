@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	isComplete := false
+	isComplete := true
 	inputText := ""
 	initsetting := ""
 	choice := ""
@@ -26,8 +26,11 @@ func main() {
 	//if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 	//	log.Fatal(err)
 	//}
-	//
-	//provideSuggestions()
+
+	message := provideSuggestions()
+	if _, err := bot.BroadcastMessage(message).Do(); err != nil {
+		log.Print(err)
+	}
 
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
@@ -39,13 +42,6 @@ func main() {
 			}
 			return
 		}
-
-		message := linebot.NewTextMessage("Hello User")
-		if _, err := bot.BroadcastMessage(message).Do(); err != nil {
-			log.Fatal(err)
-		}
-
-		provideSuggestions()
 
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage && event.ReplyToken != "" {
