@@ -50,6 +50,10 @@ func main() {
 						}
 					} else if isComplete && util.IsValid(message.Text) {
 						initsetting = message.Text
+						msg := linebot.NewTextMessage("TEST2")
+						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
+							log.Fatal(err)
+						}
 					} else {
 						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
 							log.Print(err)
