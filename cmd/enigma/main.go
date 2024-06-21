@@ -59,11 +59,12 @@ func main() {
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
-					} else {
-						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
-							log.Print(err)
-						}
 					}
+					//} else {
+					//	if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
+					//		log.Print(err)
+					//	}
+					//}
 				}
 			} else {
 				result := ""
