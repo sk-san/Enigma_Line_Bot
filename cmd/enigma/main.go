@@ -27,6 +27,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	provideSuggestions()
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
 		if err != nil {
