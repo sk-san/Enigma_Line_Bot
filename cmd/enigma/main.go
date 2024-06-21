@@ -54,8 +54,8 @@ func main() {
 func createTemplateMessage() *linebot.TemplateMessage {
 	buttons := linebot.NewButtonsTemplate(
 		"", "What do you want to do?", "Which one？",
-		linebot.NewMessageAction("Encryption", ""),
-		linebot.NewMessageAction("Decryption", ""),
+		linebot.NewMessageAction("Encryption", "hi"),
+		linebot.NewMessageAction("Decryption", "hello"),
 	)
 	return linebot.NewTemplateMessage("これはテンプレートメッセージです", buttons)
 }
