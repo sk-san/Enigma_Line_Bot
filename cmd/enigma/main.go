@@ -59,6 +59,10 @@ func main() {
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
+						m1 := linebot.NewTextMessage(inputText)
+						bot.BroadcastMessage(m1).Do()
+						m2 := linebot.NewTextMessage(initsetting)
+						bot.BroadcastMessage(m2).Do()
 					} else {
 						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
 							log.Print(err)
