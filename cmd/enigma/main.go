@@ -78,7 +78,7 @@ func main() {
 					e.SetDefault(initialSetting)
 					result = e.Decrypt(textToProcess)
 				}
-				message := linebot.NewTextMessage(operationChoice + ": " + result + "Send something if you want to continue")
+				message := linebot.NewTextMessage(operationChoice + ": " + result + "   Send something if you want to continue")
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
 				}
