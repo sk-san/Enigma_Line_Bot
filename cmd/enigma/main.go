@@ -29,7 +29,7 @@ func main() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					if message.Text == "選択肢を見せて" {
+					if message.Text == "hi" {
 						if _, err = bot.ReplyMessage(event.ReplyToken, createTemplateMessage()).Do(); err != nil {
 							log.Print(err)
 						}
