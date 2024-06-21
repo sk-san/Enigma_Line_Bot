@@ -26,6 +26,9 @@ func main() {
 		}
 
 		for _, event := range events {
+			if event.ReplyToken == "" {
+				log.Println("OK")
+			}
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
@@ -58,5 +61,5 @@ func createTemplateMessage() *linebot.TemplateMessage {
 		linebot.NewMessageAction("Encryption", setinit),
 		linebot.NewMessageAction("Decryption", setinit),
 	)
-	return linebot.NewTemplateMessage("これはテンプレートメッセージです", buttons)
+	return linebot.NewTemplateMessage("This is a test", buttons)
 }
