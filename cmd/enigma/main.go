@@ -1,6 +1,8 @@
 package main
 
 import (
+	"Enigma/internal/core"
+	"Enigma/pkg/util"
 	"fmt"
 	"log"
 	"net/http"
@@ -37,23 +39,23 @@ func main() {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					if !(isComplete) {
+						fmt.Println(provideSuggestions())
 						if _, err = bot.ReplyMessage(event.ReplyToken, provideSuggestions()).Do(); err != nil {
 							log.Print(err)
 						}
 						isComplete = true
 
-					} else if isComplete && message.Text == "" {
-						// set initial settings
-						initsetting = "a"
-						fmt.Println(initsetting)
+					} else if isComplete && util.IsValid(message.Text) {
+						initsetting = message.Text
 					} else {
-						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("「選択肢を見せて」と入力してください")).Do(); err != nil {
+						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
 							log.Print(err)
 						}
 					}
 				}
 			} else {
-				// Provide processed text
+				e := core.Enigma_machine{}
+				e.SetDefault(initsetting)
 
 				message := linebot.NewTextMessage("This is a test")
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
@@ -82,5 +84,5 @@ func provideSuggestions() *linebot.TemplateMessage {
 		linebot.NewMessageAction("Encryption", setinitmsg),
 		linebot.NewMessageAction("Decryption", setinitmsg),
 	)
-	return linebot.NewTemplateMessage("tt", buttons)
+	return linebot.NewTemplateMessage("choice", buttons)
 }

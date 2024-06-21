@@ -19,7 +19,7 @@ func GenerateRandAlphabet() string {
 	return strings.Join(ShuffledAlphabet, ",")
 }
 
-func isValid(text string) bool {
+func IsValid(text string) bool {
 	result := false
 	if len(text) == 3 {
 		for i := range text {
