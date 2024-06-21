@@ -22,11 +22,6 @@ func main() {
 	initsetting := ""
 	choice := ""
 
-	//message := linebot.NewTextMessage("Hello User")
-	//if _, err := bot.BroadcastMessage(message).Do(); err != nil {
-	//	log.Fatal(err)
-	//}
-
 	message := provideSuggestions()
 	if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 		log.Print(err)
@@ -83,7 +78,7 @@ func main() {
 					e.SetDefault(initsetting)
 					result = e.Decrypt(inputText)
 				}
-				message := linebot.NewTextMessage(result)
+				message := linebot.NewTextMessage(choice + ": " + result)
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
 				}
@@ -111,5 +106,5 @@ func provideSuggestions() *linebot.TemplateMessage {
 		linebot.NewMessageAction("Encryption", "Encryption"),
 		linebot.NewMessageAction("Decryption", "Decryption"),
 	)
-	return linebot.NewTemplateMessage("choice", buttons)
+	return linebot.NewTemplateMessage("processing...", buttons)
 }
