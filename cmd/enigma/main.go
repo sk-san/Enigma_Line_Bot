@@ -26,9 +26,6 @@ func main() {
 		}
 
 		for _, event := range events {
-			if event.ReplyToken == "" {
-				log.Println("OK")
-			}
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
@@ -41,6 +38,11 @@ func main() {
 							log.Print(err)
 						}
 					}
+				}
+			} else {
+				message := linebot.NewTextMessage("This is a test")
+				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
+					log.Fatal(err)
 				}
 			}
 		}
