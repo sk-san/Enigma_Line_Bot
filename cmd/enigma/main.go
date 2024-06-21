@@ -3,7 +3,6 @@ package main
 import (
 	"Enigma/internal/core"
 	"Enigma/pkg/util"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -53,16 +52,12 @@ func main() {
 					} else if isComplete && util.IsValid(message.Text) {
 						dotIndex := strings.Index(message.Text, ".")
 						initsetting = message.Text[:dotIndex]
-						inputText = message.Text[:dotIndex+1]
+						inputText = message.Text[dotIndex+1:]
 
 						msg := linebot.NewTextMessage("Delete your previous message before encryption or decryption.")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
-						m1 := linebot.NewTextMessage(inputText)
-						bot.BroadcastMessage(m1).Do()
-						m2 := linebot.NewTextMessage(initsetting)
-						bot.BroadcastMessage(m2).Do()
 					} else {
 						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
 							log.Print(err)
@@ -79,8 +74,7 @@ func main() {
 					e.SetDefault(initsetting)
 					result = e.Decrypt(inputText)
 				}
-				fmt.Println(result)
-				message := linebot.NewTextMessage("TEST HERE")
+				message := linebot.NewTextMessage(result)
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
 				}
