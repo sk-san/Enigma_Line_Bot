@@ -3,7 +3,6 @@ package main
 import (
 	"Enigma/internal/core"
 	"Enigma/pkg/util"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -18,10 +17,9 @@ func main() {
 	}
 
 	isComplete := false
-	tmp_text := ""
+	inputText := ""
 	initsetting := ""
-
-	fmt.Println(tmp_text)
+	choice := ""
 
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
@@ -44,6 +42,12 @@ func main() {
 						}
 						isComplete = true
 
+					} else if isComplete && message.Text == "Decryption" || message.Text == "Encryption" {
+						choice = message.Text
+						msg := linebot.NewTextMessage("Please enter an initial setting e.g. abc")
+						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
+							log.Fatal(err)
+						}
 					} else if isComplete && util.IsValid(message.Text) {
 						initsetting = message.Text
 					} else {
@@ -53,16 +57,24 @@ func main() {
 					}
 				}
 			} else {
+				result := ""
 				e := core.Enigma_machine{}
-				e.SetDefault(initsetting)
-
-				message := linebot.NewTextMessage("This is a test")
+				if choice == "Encryption" {
+					e.SetDefault(initsetting)
+					result = e.Encrypt(inputText)
+				} else {
+					e.SetDefault(initsetting)
+					result = e.Decrypt(inputText)
+				}
+				message := linebot.NewTextMessage(result)
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
 				}
+
 				isComplete = false
-				tmp_text = ""
+				inputText = ""
 				initsetting = ""
+				choice = ""
 			}
 		}
 	})
@@ -77,11 +89,10 @@ func main() {
 }
 
 func provideSuggestions() *linebot.TemplateMessage {
-	setinitmsg := "Please set an initial setting(e.g. abc)"
 	buttons := linebot.NewButtonsTemplate(
 		"", "What do you want to do?", "Which one？",
-		linebot.NewMessageAction("Encryption", setinitmsg),
-		linebot.NewMessageAction("Decryption", setinitmsg),
+		linebot.NewMessageAction("Encryption", "Encryption"),
+		linebot.NewMessageAction("Decryption", "Decryption"),
 	)
 	return linebot.NewTemplateMessage("choice", buttons)
 }
