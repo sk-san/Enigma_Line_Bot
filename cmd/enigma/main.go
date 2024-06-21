@@ -76,7 +76,7 @@ func main() {
 					result = e.Decrypt(inputText)
 				}
 				fmt.Println(result)
-				message := linebot.NewTextMessage(result)
+				message := linebot.NewTextMessage("TEST HERE")
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
 				}
