@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	isComplete := true
+	isComplete := false
 	inputText := ""
 	initsetting := ""
 	choice := ""
