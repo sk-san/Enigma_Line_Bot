@@ -27,11 +27,6 @@ func main() {
 	//	log.Fatal(err)
 	//}
 
-	message := provideSuggestions()
-	if _, err := bot.BroadcastMessage(message).Do(); err != nil {
-		log.Print(err)
-	}
-
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
 		if err != nil {
@@ -41,6 +36,11 @@ func main() {
 				w.WriteHeader(http.StatusInternalServerError)
 			}
 			return
+		}
+
+		message := provideSuggestions()
+		if _, err := bot.BroadcastMessage(message).Do(); err != nil {
+			log.Print(err)
 		}
 
 		for _, event := range events {
