@@ -1,1 +1,1 @@
-web: ./bin/enigma
+web:./bin/enigma
