@@ -14,6 +14,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	isComplete := false
+
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
 		if err != nil {
@@ -24,8 +26,6 @@ func main() {
 			}
 			return
 		}
-
-		isComplete := false
 
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
