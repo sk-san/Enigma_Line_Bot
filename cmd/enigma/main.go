@@ -52,10 +52,11 @@ func main() {
 }
 
 func createTemplateMessage() *linebot.TemplateMessage {
+	setinit := "Please set an initial setting"
 	buttons := linebot.NewButtonsTemplate(
 		"", "What do you want to do?", "Which one？",
-		linebot.NewMessageAction("Encryption", "hi"),
-		linebot.NewMessageAction("Decryption", "hello"),
+		linebot.NewMessageAction("Encryption", setinit),
+		linebot.NewMessageAction("Decryption", setinit),
 	)
 	return linebot.NewTemplateMessage("これはテンプレートメッセージです", buttons)
 }

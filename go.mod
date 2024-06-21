@@ -5,4 +5,5 @@ go 1.21
 require (
 	github.com/line/line-bot-sdk-go v7.8.0+incompatible // indirect
 	github.com/line/line-bot-sdk-go/v7 v7.21.0 // indirect
+	github.com/line/line-bot-sdk-go/v8 v8.7.0 // indirect
 )
