@@ -17,17 +17,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	isComplete := false
+	isComplete := true
 	inputText := ""
 	initsetting := ""
 	choice := ""
 
-	message := linebot.NewTextMessage("Hello User, please send alphabet")
+	message := linebot.NewTextMessage("Hello User")
 	if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 		log.Fatal(err)
 	}
 
 	provideSuggestions()
+
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
 		if err != nil {
