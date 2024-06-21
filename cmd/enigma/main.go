@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	isComplete := true
+	isComplete := false
 	inputText := ""
 	initsetting := ""
 	choice := ""
@@ -33,12 +33,12 @@ func main() {
 			return
 		}
 
+		message := linebot.NewTextMessage("Hello User, please send alphabet")
+		if _, err := bot.BroadcastMessage(message).Do(); err != nil {
+			log.Fatal(err)
+		}
+
 		for _, event := range events {
-			if event.Type == linebot.EventTypeJoin {
-				if _, err = bot.ReplyMessage(event.ReplyToken, provideSuggestions()).Do(); err != nil {
-					log.Print(err)
-				}
-			}
 			if event.Type == linebot.EventTypeMessage && event.ReplyToken != "" {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
@@ -58,7 +58,7 @@ func main() {
 						initsetting = message.Text[:dotIndex]
 						inputText = message.Text[dotIndex+1:]
 
-						msg := linebot.NewTextMessage("Delete your previous message before encryption or decryption.")
+						msg := linebot.NewTextMessage("Delete your previous setting and inputText before encryption or decryption.")
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
