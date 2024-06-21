@@ -33,8 +33,12 @@ func main() {
 			return
 		}
 
-		provideSuggestions()
 		for _, event := range events {
+			if event.Type == linebot.EventTypeJoin {
+				if _, err = bot.ReplyMessage(event.ReplyToken, provideSuggestions()).Do(); err != nil {
+					log.Print(err)
+				}
+			}
 			if event.Type == linebot.EventTypeMessage && event.ReplyToken != "" {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
@@ -43,7 +47,6 @@ func main() {
 							log.Print(err)
 						}
 						isComplete = true
-
 					} else if isComplete && message.Text == "Decryption" || message.Text == "Encryption" {
 						choice = message.Text
 						msg := linebot.NewTextMessage("Please enter three alphabets as an initial setting and text (e.g abc.Hello Python) Do not forget adding . dot between three alphabets and text")
