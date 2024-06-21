@@ -22,6 +22,11 @@ func main() {
 	initsetting := ""
 	choice := ""
 
+	message := linebot.NewTextMessage("Hello User, please send alphabet")
+	if _, err := bot.BroadcastMessage(message).Do(); err != nil {
+		log.Fatal(err)
+	}
+
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
 		if err != nil {
@@ -31,11 +36,6 @@ func main() {
 				w.WriteHeader(http.StatusInternalServerError)
 			}
 			return
-		}
-
-		message := linebot.NewTextMessage("Hello User, please send alphabet")
-		if _, err := bot.BroadcastMessage(message).Do(); err != nil {
-			log.Fatal(err)
 		}
 
 		for _, event := range events {
