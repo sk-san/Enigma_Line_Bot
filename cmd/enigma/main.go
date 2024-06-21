@@ -35,7 +35,7 @@ func main() {
 		}
 
 		for _, event := range events {
-			if event.Type == linebot.EventTypeMessage {
+			if event.Type == linebot.EventTypeMessage && event.ReplyToken != "" {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					if !(isComplete) {
@@ -59,12 +59,11 @@ func main() {
 						if _, err := bot.BroadcastMessage(msg).Do(); err != nil {
 							log.Fatal(err)
 						}
+					} else {
+						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
+							log.Print(err)
+						}
 					}
-					//} else {
-					//	if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Enter Valid strings")).Do(); err != nil {
-					//		log.Print(err)
-					//	}
-					//}
 				}
 			} else {
 				result := ""
