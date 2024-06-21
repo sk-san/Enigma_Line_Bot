@@ -3,6 +3,7 @@ package main
 import (
 	"Enigma/internal/core"
 	"Enigma/pkg/util"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -74,6 +75,7 @@ func main() {
 					e.SetDefault(initsetting)
 					result = e.Decrypt(inputText)
 				}
+				fmt.Println(result)
 				message := linebot.NewTextMessage(result)
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
