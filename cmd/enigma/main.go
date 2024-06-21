@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +16,10 @@ func main() {
 	}
 
 	isComplete := false
+	tmp_text := ""
+	initsetting := ""
+
+	fmt.Println(tmp_text)
 
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
@@ -31,11 +36,16 @@ func main() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					if !(isComplete) && message.Text == "hi" {
-						if _, err = bot.ReplyMessage(event.ReplyToken, createTemplateMessage()).Do(); err != nil {
+					if !(isComplete) {
+						if _, err = bot.ReplyMessage(event.ReplyToken, provideSuggestions()).Do(); err != nil {
 							log.Print(err)
 						}
 						isComplete = true
+
+					} else if isComplete && message.Text == "" {
+						// set initial settings
+						initsetting = "a"
+						fmt.Println(initsetting)
 					} else {
 						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("「選択肢を見せて」と入力してください")).Do(); err != nil {
 							log.Print(err)
@@ -44,10 +54,14 @@ func main() {
 				}
 			} else {
 				// Provide processed text
+
 				message := linebot.NewTextMessage("This is a test")
 				if _, err := bot.BroadcastMessage(message).Do(); err != nil {
 					log.Fatal(err)
 				}
+				isComplete = false
+				tmp_text = ""
+				initsetting = ""
 			}
 		}
 	})
@@ -60,12 +74,12 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-func createTemplateMessage() *linebot.TemplateMessage {
-	setinit := "Please set an initial setting(e.g. abc)"
+func provideSuggestions() *linebot.TemplateMessage {
+	setinitmsg := "Please set an initial setting(e.g. abc)"
 	buttons := linebot.NewButtonsTemplate(
 		"", "What do you want to do?", "Which one？",
-		linebot.NewMessageAction("Encryption", setinit),
-		linebot.NewMessageAction("Decryption", setinit),
+		linebot.NewMessageAction("Encryption", setinitmsg),
+		linebot.NewMessageAction("Decryption", setinitmsg),
 	)
 	return linebot.NewTemplateMessage("tt", buttons)
 }

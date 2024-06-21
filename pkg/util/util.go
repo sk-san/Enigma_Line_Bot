@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+	"unicode"
 )
 
 func GenerateRandAlphabet() string {
@@ -17,4 +18,17 @@ func GenerateRandAlphabet() string {
 	})
 
 	return strings.Join(ShuffledAlphabet, ",")
+}
+
+func isValid(text string) bool {
+	result := true
+	if len(text) != 3 {
+		result = false
+	}
+	for i := range text {
+		if !unicode.IsLetter(rune(text[i])) {
+			result = false
+		}
+	}
+	return result
 }
